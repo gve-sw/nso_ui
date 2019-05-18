@@ -1,6 +1,3 @@
-# nso_ui
-CSAP software project FY2019
-
 # Installation:
 
 pip install -r requirements.txt
