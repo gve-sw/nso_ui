@@ -1,0 +1,146 @@
+import requests
+import settings
+from requests.auth import HTTPBasicAuth
+from lxml import etree
+from flask import Flask, render_template, request, redirect
+from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user
+from config import *
+
+app = Flask(__name__)
+
+app.config.update(
+    DEBUG=True,
+    SECRET_KEY='secret'
+)
+
+
+lm = LoginManager()
+lm.init_app(app)
+lm.login_view = "login"
+
+
+class User(UserMixin):
+
+    def __init__(self, id):
+        self.id = id
+        self.name = 'user' + str(id)
+        self.password = 'password'
+
+    def __repr__(self):
+        return self.id
+
+    def is_active(self):
+        return True
+
+    def get_id(self):
+        return self.id
+
+    def is_anonymous(self):
+        return False
+
+    def is_authenticated(self):
+        return self.is_authenticated()
+
+
+user = User(1)
+
+
+# Returns list and number of devices, services or NEDs
+#
+def get_items(url, xpath, xmlns, method="GET", frr=False):
+    payload = ''
+    auth = HTTPBasicAuth(NSO_USER, NSO_PASSWD)
+
+    response = requests.request(method, url, data=payload, auth=auth)
+    root = etree.XML(response.text)
+    if settings.VERBOSE:
+        print response.text
+    items = root.xpath(xpath, namespaces={'ns': xmlns})
+    if frr:
+        return items
+    items = [item.text for item in items]
+    items_num = len(items)
+    return items, items_num
+
+
+@app.route("/nso_status")
+@login_required
+def nso_status():
+    auth = HTTPBasicAuth(NSO_USER, NSO_PASSWD)
+    response = requests.request('GET', API_ROOT, auth=auth)
+    return "NSO responded: %s %s" % (str(response.status_code), str(response.reason))
+
+
+@app.route("/")
+@app.route("/index")
+@app.route("/index.html")
+@login_required
+def index():
+
+    status = nso_status()
+
+    sync = {'error': 0,
+            'in-sync': 0,
+            'unsupported': 0,
+            'out-of-sync': 0,
+            }
+
+    devices, device_num = get_items(devices_url, device_xpath, device_xmlns)
+    neds, ned_num = get_items(neds_url, ned_xpath, ned_xmlns)
+    neds = [ned.strip('tailf-ned-') for ned in neds if 'tailf-ned-' in ned]
+    services, service_num = get_items(services_url, service_xpath, service_xmlns)
+    serviceDeployed, _ = get_items(servicesDeployed_url, serviceDeployed_xpath, device_xmlns, method="POST")
+    serviceDeployed_num = len(serviceDeployed)
+
+    alarms_devices, _ = get_items(alarms_list_url, alarms_device_xpath, alarms_xmlns)
+    alarms_types, alarm_num = get_items(alarms_list_url, alarms_type_xpath, alarms_xmlns)
+    alarms = ["%s: %s" % (device, alarm_type) for device, alarm_type in zip(alarms_devices, alarms_types)]
+
+    sync_st, _ = get_items(checkSync_url, checkSync_xpath, device_xmlns, method="POST")
+
+    for item in sync_st:
+        sync[item] += 1
+
+    if settings.VERBOSE:
+        print sync
+
+    return render_template('index.html', **locals())
+
+
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        if password == 'password':
+            login_user(user)
+            next_page = request.args.get("next")
+            if next_page is not None:
+                return redirect(next_page)
+            else:
+                return redirect('/')
+        else:
+            return render_template('login.html', login_error=True)
+    return render_template('login.html')
+
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect("login")
+
+
+@app.route("/devices")
+@app.route("/devices.html")
+@login_required
+def devices():
+    return render_template('devices.html')
+
+
+@lm.user_loader
+def load_user(userid):
+    return User(userid)
+
+
+if __name__ == "__main__":
+    app.run()
