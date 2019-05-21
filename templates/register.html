@@ -9,7 +9,8 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>SB Admin 2 - Register</title>
+  <title>NSO Service Portal - Register</title>
+  <link rel="shortcut icon" type="image/x-icon" href="../static/img/favicon.ico"/>
 
   <!-- Custom fonts for this template-->
   <link href="../static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -32,33 +33,39 @@
           <div class="col-lg-7">
             <div class="p-5">
               <div class="text-center">
-                <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
+                <h1 class="h4 text-gray-900 mb-4">Create an Account</h1>
               </div>
-              <form class="user">
+              <form class="user" action="" method="POST">
                 <div class="form-group row">
                   <div class="col-sm-6 mb-3 mb-sm-0">
-                    <input type="text" class="form-control form-control-user" id="exampleFirstName" placeholder="First Name">
+                    <input type="text" class="form-control form-control-user" id="FirstName" name="FirstName" placeholder="First Name">
                   </div>
                   <div class="col-sm-6">
-                    <input type="text" class="form-control form-control-user" id="exampleLastName" placeholder="Last Name">
+                    <input type="text" class="form-control form-control-user" id="LastName" name="LastName" placeholder="Last Name">
                   </div>
-                </div>
-                <div class="form-group">
-                  <input type="email" class="form-control form-control-user" id="exampleInputEmail" placeholder="Email Address">
                 </div>
                 <div class="form-group row">
                   <div class="col-sm-6 mb-3 mb-sm-0">
-                    <input type="password" class="form-control form-control-user" id="exampleInputPassword" placeholder="Password">
+                    <input type="text" class="form-control form-control-user" id="Username" name="Username" placeholder="Username">
                   </div>
                   <div class="col-sm-6">
-                    <input type="password" class="form-control form-control-user" id="exampleRepeatPassword" placeholder="Repeat Password">
+                    <input type="text" class="form-control form-control-user" id="Email" name="Email" placeholder="Email Address">
                   </div>
                 </div>
-                <a href="login.html" class="btn btn-primary btn-user btn-block">
-                  Register Account
-                </a>
+                <!-- <div class="form-group">
+                  <input type="email" class="form-control form-control-user" id="Email" name="Email" placeholder="Email Address">
+                </div> -->
+                <div class="form-group row">
+                  <div class="col-sm-6 mb-3 mb-sm-0">
+                    <input type="password" class="form-control form-control-user" id="Password" name="Password" placeholder="Password">
+                  </div>
+                  <div class="col-sm-6">
+                    <input type="password" class="form-control form-control-user" id="RepeatPassword" name="RepeatPassword" placeholder="Repeat Password">
+                  </div>
+                </div>
+                <input class="btn btn-primary btn-user btn-block" type="submit" value="Register">
                 <hr>
-                <a href="index.html" class="btn btn-google btn-user btn-block">
+                <!--<a href="index.html" class="btn btn-google btn-user btn-block">
                   <i class="fab fa-google fa-fw"></i> Register with Google
                 </a>
                 <a href="index.html" class="btn btn-facebook btn-user btn-block">
@@ -68,9 +75,18 @@
               <hr>
               <div class="text-center">
                 <a class="small" href="forgot-password.html">Forgot Password?</a>
-              </div>
+              </div> -->
+                {% if password_error %}
+                    <h1 class="h4 text-danger mb-4">Passwords don't match</h1>
+                {% endif %}
+                {% if user_exists %}
+                    <h1 class="h4 text-danger mb-4">Username exists</h1>
+                {% endif %}
+                {% if success %}
+                    <h1 class="h4 text-success mb-4">Registered successfully</h1>
+                {% endif %}
               <div class="text-center">
-                <a class="small" href="login.html">Already have an account? Login!</a>
+                <a class="small" href="login.html">Already have an account?</a>
               </div>
             </div>
           </div>

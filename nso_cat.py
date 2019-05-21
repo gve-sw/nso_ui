@@ -105,6 +105,7 @@ def index():
 
 
 @app.route("/login", methods=['GET', 'POST'])
+@app.route("/login.html", methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
@@ -129,6 +130,35 @@ def logout():
     return redirect("login")
 
 
+@app.route("/register", methods=['GET', 'POST'])
+@app.route("/register.html", methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['Username']
+        password = request.form['Password']
+        _password = request.form['RepeatPassword']
+        first_name = request.form['FirstName']
+        last_name = request.form['LastName']
+        email = request.form['Email']
+        if not password == _password:
+            return render_template('register.html', password_error=True)
+
+        con = sqlite3.connect('static/db/user.db')
+        with con:
+            cursor = con.cursor()
+            cursor.execute("SELECT * FROM users where username='%s'" % username)
+            row = cursor.fetchone()
+            if row:
+                return render_template('register.html', user_exists=True)
+
+            hashed_password = hashlib.md5(password.encode()).hexdigest()
+            cursor.execute("INSERT INTO users VALUES ('%s', '%s', '%s', '%s', '%s')" %
+                           (username, hashed_password, first_name, last_name, email))
+            return render_template('register.html', success=True)
+
+    return render_template('register.html')
+
+
 @app.route("/devices")
 @app.route("/devices.html")
 @login_required
@@ -143,7 +173,6 @@ def load_user(userid):
 
 def validate(username, password):
     con = sqlite3.connect('static/db/user.db')
-    print con
     auth_status = False
     with con:
         cursor = con.cursor()
