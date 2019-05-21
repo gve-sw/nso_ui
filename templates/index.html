@@ -65,7 +65,7 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Device list:</h6>
             {% for device in devices %}
-             <a class="collapse-item" target="_blank"
+             <a class="collapse-item" target="nso_iframe"
                 href="http://localhost:8080/webui-one/ConfigurationEditor/ncs:devices/device%7B{{device}}%7D">{{ device }}</a>
             {% endfor %}
           </div>
@@ -82,7 +82,7 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Available Services:</h6>
             {% for service in services %}
-            <a class="collapse-item" target="_blank"
+            <a class="collapse-item" target="nso_iframe"
                href="http://localhost:8080/webui-one/ConfigurationEditor/{{ service }}">{{ service }}</a>
             {% endfor %}
           </div>
@@ -98,7 +98,7 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Items available:</h6>
             {% for ned in neds %}
-            <a class="collapse-item" target="_blank"
+            <a class="collapse-item" target="nso_iframe"
                href="http://localhost:8080/prime/#/model/ncs:packages/package%7B%22{{ ned }}%22%7D">{{ ned }}</a>
             {% endfor %}
 
@@ -237,7 +237,7 @@
                   </div>
                 </a>
                 {% endfor %}
-                <a class="dropdown-item text-center small text-gray-500" target="_blank"
+                <a class="dropdown-item text-center small text-gray-500" target="nso_iframe"
                    href="http://localhost:8080/prime/#/model//al:alarms/alarm-list/al:alarm">Open Alarm List</a>
               </div>
             </li>
@@ -303,7 +303,7 @@
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ current_user.name }}</span>
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ current_user.id }}</span>
                 <img class="img-profile rounded-circle" src="../static/img/user-profile.png">
               </a>
               <!-- Dropdown - User Information -->
@@ -339,7 +339,7 @@
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-            <a href="http://localhost:8080/prime/#/model//ncs:compliance/reports/ncs:report" target="_blank"
+            <a href="http://localhost:8080/prime/#/model//ncs:compliance/reports/ncs:report" target="nso_iframe"
                class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Compliance Report</a>
           </div>
 
@@ -447,7 +447,8 @@
                 <!-- Card Body -->
                 <div class="card-body">
                   <div class="chart-area">
-                    <iframe src="http://localhost:8080/webui-one/DeviceManager"></iframe>
+                    <iframe src="http://localhost:8080/webui-one/DeviceManager" height="320" width="900"
+                            name="nso_iframe"></iframe>
                   </div>
                 </div>
               </div>
@@ -465,7 +466,7 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
                       <div class="dropdown-header">Actions:</div>
-                      <a class="dropdown-item" target="_blank"
+                      <a class="dropdown-item" target="nso_iframe"
                          href="http://localhost:8080/webui-one/DeviceManager">Run Device Manager</a>
                       <a class="dropdown-item" href="devices.html">Open Devices View</a>
                     </div>

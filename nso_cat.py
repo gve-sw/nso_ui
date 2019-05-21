@@ -1,5 +1,7 @@
 import requests
 import settings
+import sqlite3
+import hashlib
 from requests.auth import HTTPBasicAuth
 from lxml import etree
 from flask import Flask, render_template, request, redirect
@@ -23,8 +25,6 @@ class User(UserMixin):
 
     def __init__(self, id):
         self.id = id
-        self.name = 'user' + str(id)
-        self.password = 'password'
 
     def __repr__(self):
         return self.id
@@ -40,9 +40,6 @@ class User(UserMixin):
 
     def is_authenticated(self):
         return self.is_authenticated()
-
-
-user = User(1)
 
 
 # Returns list and number of devices, services or NEDs
@@ -112,7 +109,9 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        if password == 'password':
+        auth_status = validate(username, password)
+        if auth_status:
+            user = User(username)
             login_user(user)
             next_page = request.args.get("next")
             if next_page is not None:
@@ -140,6 +139,28 @@ def devices():
 @lm.user_loader
 def load_user(userid):
     return User(userid)
+
+
+def validate(username, password):
+    con = sqlite3.connect('static/db/user.db')
+    print con
+    auth_status = False
+    with con:
+        cursor = con.cursor()
+        cursor.execute("SELECT * FROM users where username='%s'" % username)
+        row = cursor.fetchone()
+        if not row:
+            return auth_status
+        if username == row[0]:
+            auth_status = check_password(row[1], password)
+
+    return auth_status
+
+
+def check_password(hashed_password, user_password):
+    print hashed_password
+    print hashlib.md5(user_password.encode()).hexdigest()
+    return hashed_password == hashlib.md5(user_password.encode()).hexdigest()
 
 
 if __name__ == "__main__":
