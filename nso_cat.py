@@ -11,11 +11,12 @@ from config import *
 app = Flask(__name__)
 
 app.config.update(
-    DEBUG=True,
-    SECRET_KEY='secret'
+    DEBUG=settings.DEBUG,
+    SECRET_KEY=settings.SK
 )
 
 
+# Initializes
 lm = LoginManager()
 lm.init_app(app)
 lm.login_view = "login"
@@ -187,8 +188,6 @@ def validate(username, password):
 
 
 def check_password(hashed_password, user_password):
-    print hashed_password
-    print hashlib.md5(user_password.encode()).hexdigest()
     return hashed_password == hashlib.md5(user_password.encode()).hexdigest()
 
 
