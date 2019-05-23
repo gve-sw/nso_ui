@@ -141,6 +141,11 @@ def register():
         first_name = request.form['FirstName']
         last_name = request.form['LastName']
         email = request.form['Email']
+
+        if not username:
+            return render_template('register.html', username_error=True)
+        if len(password) < settings.PASS_LEN:
+            return render_template('register.html', password_len_error=True, PASS_LEN=settings.PASS_LEN)
         if not password == _password:
             return render_template('register.html', password_error=True)
 
