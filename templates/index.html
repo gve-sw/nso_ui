@@ -66,7 +66,7 @@
             <h6 class="collapse-header">Device list:</h6>
             {% for device in devices %}
              <a class="collapse-item" target="nso_iframe"
-                href="http://localhost:8080/webui-one/ConfigurationEditor/ncs:devices/device%7B{{device}}%7D">{{ device }}</a>
+                href="{{NSO_ROOT}}/webui-one/ConfigurationEditor/ncs:devices/device%7B{{device}}%7D">{{ device }}</a>
             {% endfor %}
           </div>
         </div>
@@ -83,7 +83,7 @@
             <h6 class="collapse-header">Available Services:</h6>
             {% for service in services %}
             <a class="collapse-item" target="nso_iframe"
-               href="http://localhost:8080/webui-one/ConfigurationEditor/{{ service }}">{{ service }}</a>
+               href="{{NSO_ROOT}}/webui-one/ConfigurationEditor/{{ service }}">{{ service }}</a>
             {% endfor %}
           </div>
         </div>
@@ -99,20 +99,20 @@
             <h6 class="collapse-header">Items available:</h6>
             {% for ned in neds %}
             <a class="collapse-item" target="nso_iframe"
-               href="http://localhost:8080/prime/#/model/ncs:packages/package%7B%22{{ ned }}%22%7D">{{ ned }}</a>
+               href="{{NSO_ROOT}}/prime/#/model/ncs:packages/package%7B%22{{ ned }}%22%7D">{{ ned }}</a>
             {% endfor %}
 
           </div>
         </div>
       </li>
 
-      <!-- Divider -->
+      <!-- Divider
       <hr class="sidebar-divider">
 
-      <!-- Heading -->
+
       <div class="sidebar-heading">
         Addons
-      </div>
+      </div> -->
 
       <!-- Nav Item - Pages Collapse Menu
       <li class="nav-item">
@@ -141,12 +141,12 @@
           <span>Charts</span></a>
       </li> -->
 
-      <!-- Nav Item - Devices -->
+      <!-- Nav Item - Devices
       <li class="nav-item">
         <a class="nav-link" href="devices.html">
           <i class="fas fa-fw fa-table"></i>
           <span>Device View</span></a>
-      </li>
+      </li> -->
 
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
@@ -172,8 +172,8 @@
           <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
             <i class="fa fa-bars"></i>
           </button>
-
           <div class="sidebar-brand-text mx-3">ORGANIZATION NAME
+
             {% if '200' not in status %}
             <div class="text-xs font-weight-bold text-error text-uppercase mb-1">{{status}}</div>
             {% endif %}</div>
@@ -238,7 +238,7 @@
                 </a>
                 {% endfor %}
                 <a class="dropdown-item text-center small text-gray-500" target="nso_iframe"
-                   href="http://localhost:8080/prime/#/model//al:alarms/alarm-list/al:alarm">Open Alarm List</a>
+                   href="{{NSO_ROOT}}/prime/#/model//al:alarms/alarm-list/al:alarm">Open Alarm List</a>
               </div>
             </li>
 
@@ -339,7 +339,7 @@
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-            <a href="http://localhost:8080/prime/#/model//ncs:compliance/reports/ncs:report" target="nso_iframe"
+            <a href="{{NSO_ROOT}}/prime/#/model//ncs:compliance/reports/ncs:report" target="nso_iframe"
                class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Compliance Report</a>
           </div>
 
@@ -437,14 +437,14 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
                       <div class="dropdown-header">Actions:</div>
-                      <a class="dropdown-item" href="http://localhost:8080" target="_blank">Open in a new tab</a>
+                      <a class="dropdown-item" href="{{NSO_ROOT}}" target="_blank">Open in a new tab</a>
                     </div>
                   </div>
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
                   <div class="chart-area">
-                    <iframe src="http://localhost:8080/webui-one/DeviceManager"
+                    <iframe src="{{NSO_ROOT}}/webui-one/DeviceManager"
                              frameborder="0" name="nso_iframe" height="100%" width="100%"></iframe>
                   </div>
                 </div>
@@ -463,7 +463,7 @@
                     <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
                       <div class="dropdown-header">Actions:</div>
                       <a class="dropdown-item" target="nso_iframe"
-                         href="http://localhost:8080/webui-one/DeviceManager">Run Device Manager</a>
+                         href="{{NSO_ROOT}}/webui-one/DeviceManager">Run Device Manager</a>
                       <a class="dropdown-item" href="devices.html">Open Devices View</a>
                     </div>
                   </div>

@@ -102,7 +102,7 @@ def index():
     if settings.VERBOSE:
         print sync
 
-    return render_template('index.html', **locals())
+    return render_template('index.html', NSO_ROOT=NSO_ROOT, **locals())
 
 
 @app.route("/login", methods=['GET', 'POST'])
