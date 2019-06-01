@@ -172,11 +172,29 @@
           <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
             <i class="fa fa-bars"></i>
           </button>
-          <div class="sidebar-brand-text mx-3">ORGANIZATION NAME
+          <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                  {% if current_customer %}
+                  {{current_customer}}
+                  {% else %}
+                  CUSTOMER
+                  {% endif %}
+                </span>
+          </a>
+          <div class="dropdown-menu dropdown-menu-left shadow animated--grow-in" aria-labelledby="userDropdown">
+              {% for customer in customers %}
+            <form class="user" action="" method="post">
+                <!-- <a class="dropdown-item" href="#"> -->
+                  <input class="dropdown-item" type="submit" value="{{customer}}" name="current_customer">
+                  <!-- {{ customer }}
+                </a> -->
+              {% endfor %}
+            </form>
+          </div>
 
             {% if '200' not in status %}
             <div class="text-xs font-weight-bold text-error text-uppercase mb-1">{{status}}</div>
-            {% endif %}</div>
+            {% endif %}
           <!-- Topbar search
           <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
             <div class="input-group">

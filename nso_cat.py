@@ -69,12 +69,14 @@ def nso_status():
     return "NSO responded: %s %s" % (str(response.status_code), str(response.reason))
 
 
-@app.route("/")
-@app.route("/index")
-@app.route("/index.html")
+@app.route("/", methods=['GET', 'POST'])
+@app.route("/index", methods=['GET', 'POST'])
+@app.route("/index.html", methods=['GET', 'POST'])
 @login_required
 def index():
 
+    if request.method == "POST":
+        current_customer = request.form["current_customer"]
     status = nso_status()
 
     sync = {'error': 0,
@@ -93,6 +95,8 @@ def index():
     alarms_devices, _ = get_items(alarms_list_url, alarms_device_xpath, alarms_xmlns)
     alarms_types, alarm_num = get_items(alarms_list_url, alarms_type_xpath, alarms_xmlns)
     alarms = ["%s: %s" % (device, alarm_type) for device, alarm_type in zip(alarms_devices, alarms_types)]
+
+    customers, _ = get_items(customers_url, customer_xpath, customer_xmlns)
 
     sync_st, _ = get_items(checkSync_url, checkSync_xpath, device_xmlns, method="POST")
 
