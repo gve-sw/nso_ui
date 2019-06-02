@@ -18,12 +18,13 @@ customers_url = CONF_URL + '/customers'
 
 # Customer Service
 # Includes a binding to a service: <service-id>/l3vpn:l3vpn[l3vpn:name='abc']</service-id>
-customer_service_url = API_ROOT + '/running/services/_operations/check-sync'
+customer_service_url = API_ROOT + '/operational/customers/customer'
 
 # XML NS
 device_xmlns = ned_xmlns = customer_xmlns = "http://tail-f.com/ns/ncs"
 service_xmlns = "http://tail-f.com/yang/ncs-monitoring"
 alarms_xmlns = "http://tail-f.com/ns/ncs-alarms"
+customer_service_xmlns = "http://tail-f.com/ns/rest"
 
 # XPATH
 device_xpath = ".//ns:device/ns:name"
@@ -34,3 +35,4 @@ serviceDeployed_xpath = ".//ns:service-id"
 alarms_device_xpath = ".//ns:device"
 alarms_type_xpath = ".//ns:type"
 customer_xpath = ".//ns:id"
+customer_service_xpath = './/ns:customer[descendant::ns:id[text()="%s"]]/ns:customer-service'

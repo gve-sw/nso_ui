@@ -77,6 +77,9 @@ def index():
 
     if request.method == "POST":
         current_customer = request.form["current_customer"]
+    else:
+        current_customer = ''
+
     status = nso_status()
 
     sync = {'error': 0,
@@ -97,6 +100,8 @@ def index():
     alarms = ["%s: %s" % (device, alarm_type) for device, alarm_type in zip(alarms_devices, alarms_types)]
 
     customers, _ = get_items(customers_url, customer_xpath, customer_xmlns)
+    customer_service, customer_service_num = get_items(customer_service_url, customer_service_xpath % current_customer, customer_xmlns)
+    print customer_service
 
     sync_st, _ = get_items(checkSync_url, checkSync_xpath, device_xmlns, method="POST")
 

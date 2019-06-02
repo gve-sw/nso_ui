@@ -89,6 +89,25 @@
         </div>
       </li>
 
+      {% if customer_service_num %}
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCustServices"
+           aria-expanded="true" aria-controls="collapseCuseServices">
+          <i class="fas fa-fw fa-wrench"></i>
+          <span>Services for {{current_customer}}</span>
+        </a>
+        <div id="collapseCustServices" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Available Services:</h6>
+            {% for service in customer_service %}
+            <a class="collapse-item" target="nso_iframe"
+               href="{{NSO_ROOT}}/webui-one/ConfigurationEditor/ncs:services/customer-service%7B{{service}}%7D">{{ service }}</a>
+            {% endfor %}
+          </div>
+        </div>
+      </li>
+      {% endif %}
+
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseNEDs" aria-expanded="true" aria-controls="collapseNEDs">
           <i class="fas fa-fw fa-folder"></i>
