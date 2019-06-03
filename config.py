@@ -14,10 +14,6 @@ services_url = OPER_URL + "/ncs-state/internal/callpoints/servicepoint"
 servicesDeployed_url = API_ROOT + '/running/services/_operations/check-sync'
 alarms_list_url = OPER_URL + '/alarms/alarm-list'
 customers_url = CONF_URL + '/customers'
-
-
-# Customer Service
-# Includes a binding to a service: <service-id>/l3vpn:l3vpn[l3vpn:name='abc']</service-id>
 customer_service_url = API_ROOT + '/operational/customers/customer'
 
 # XML NS
