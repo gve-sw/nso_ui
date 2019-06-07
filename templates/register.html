@@ -79,6 +79,9 @@
               <div class="text-center">
                 <a class="small" href="forgot-password.html">Forgot Password?</a>
               </div> -->
+                {% if database_error %}
+                    <h1 class="h4 text-danger mb-4">Connection to the DB failed</h1>
+                {% endif %}
                 {% if password_error %}
                     <h1 class="h4 text-danger mb-4">Passwords don't match</h1>
                 {% endif %}

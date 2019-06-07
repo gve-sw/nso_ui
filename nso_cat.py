@@ -84,8 +84,13 @@ def get_items(url, xpath, xmlns, method="GET", frr=False):
 @app.route("/nso_status")
 @login_required
 def nso_status():
-    auth = HTTPBasicAuth(NSO_USER, NSO_PASSWD)
-    response = requests.request('GET', API_ROOT, auth=auth)
+
+    try:
+        auth = HTTPBasicAuth(NSO_USER, NSO_PASSWD)
+        response = requests.request('GET', API_ROOT, auth=auth)
+    except requests.ConnectionError:
+        return "Connection to NSO was unsuccessful [ERR 500]"
+
     return "NSO responded: %s %s" % (str(response.status_code), str(response.reason))
 
 
@@ -113,36 +118,43 @@ def index():
             'out-of-sync': 0,
             }
 
-    # Fetching all kinds of data from NSO utilizing XPath and XML NS from the config module. Variable _ used to skip
-    # unneeded data. get_items is used for any item below
-    devices, device_num = get_items(devices_url, device_xpath, device_xmlns)
-    neds, ned_num = get_items(neds_url, ned_xpath, ned_xmlns)
+    # Return the error code if the connection to NSO failed
+    if '500' in status:
+        return render_template('index.html', NSO_ROOT=NSO_ROOT, **locals())
 
-    # Stripping the tailf-ned- part that is present in some NEDs
-    neds = [ned.strip('tailf-ned-') for ned in neds if 'tailf-ned-' in ned]
+    try:
+        # Fetching all kinds of data from NSO utilizing XPath and XML NS from the config module. Variable _ used to skip
+        # unneeded data. get_items is used for any item below
+        devices, device_num = get_items(devices_url, device_xpath, device_xmlns)
+        neds, ned_num = get_items(neds_url, ned_xpath, ned_xmlns)
 
-    services, service_num = get_items(services_url, service_xpath, service_xmlns)
-    serviceDeployed, _ = get_items(servicesDeployed_url, serviceDeployed_xpath, device_xmlns, method="POST")
-    serviceDeployed_num = len(serviceDeployed)
+        # Stripping the tailf-ned- part that is present in some NEDs
+        neds = [ned.strip('tailf-ned-') for ned in neds if 'tailf-ned-' in ned]
 
-    alarms_devices, _ = get_items(alarms_list_url, alarms_device_xpath, alarms_xmlns)
-    alarms_types, alarm_num = get_items(alarms_list_url, alarms_type_xpath, alarms_xmlns)
+        services, service_num = get_items(services_url, service_xpath, service_xmlns)
+        serviceDeployed, _ = get_items(servicesDeployed_url, serviceDeployed_xpath, device_xmlns, method="POST")
+        serviceDeployed_num = len(serviceDeployed)
 
-    # Constructing text to depict in alarm section in the frontend
-    alarms = ["%s: %s" % (device, alarm_type) for device, alarm_type in zip(alarms_devices, alarms_types)]
+        alarms_devices, _ = get_items(alarms_list_url, alarms_device_xpath, alarms_xmlns)
+        alarms_types, alarm_num = get_items(alarms_list_url, alarms_type_xpath, alarms_xmlns)
 
-    # When there's no customer service (i. e. no customer selected), there will be no "Services for X" in the frontend
-    customers, _ = get_items(customers_url, customer_xpath, customer_xmlns)
-    customer_service, customer_service_num = get_items(customer_service_url, customer_service_xpath % current_customer,
+        # Constructing text to depict in alarm section in the frontend
+        alarms = ["%s: %s" % (device, alarm_type) for device, alarm_type in zip(alarms_devices, alarms_types)]
+
+        # When there's no customer service (i. e. no customer selected), there will be no "Services for X" in the frontend
+        customers, _ = get_items(customers_url, customer_xpath, customer_xmlns)
+        customer_service, customer_service_num = get_items(customer_service_url, customer_service_xpath % current_customer,
                                                        customer_xmlns)
+        sync_st, _ = get_items(checkSync_url, checkSync_xpath, device_xmlns, method="POST")
 
-    sync_st, _ = get_items(checkSync_url, checkSync_xpath, device_xmlns, method="POST")
+        for item in sync_st:
+            sync[item] += 1
 
-    for item in sync_st:
-        sync[item] += 1
+        if settings.VERBOSE:
+            print sync
 
-    if settings.VERBOSE:
-        print sync
+    except etree.XMLSyntaxError:
+        pass
 
     # **locals() for all the local variables to populate HTML files accordingly. NSO_ROOT is imported from the config,
     # hence is not local, so we need to pass it manually
@@ -164,6 +176,10 @@ def login():
 
         # Validating the username
         auth_status = validate(username, password)
+
+        # Catching database problems:
+        if auth_status == 500:
+            return render_template('login.html', database_error=True)
 
         # If username is correct, performing the login (creating session)
         if auth_status:
@@ -223,7 +239,12 @@ def register():
         con = sqlite3.connect('static/db/user.db')
         with con:
             cursor = con.cursor()
-            cursor.execute("SELECT * FROM users where username='%s'" % username)
+
+            try:
+                cursor.execute("SELECT * FROM users where username='%s'" % username)
+            except sqlite3.OperationalError:
+                return render_template('register.html', database_error=True)
+
             row = cursor.fetchone()
             if row:
                 return render_template('register.html', user_exists=True)
@@ -261,7 +282,10 @@ def validate(username, password):
     auth_status = False
     with con:
         cursor = con.cursor()
-        cursor.execute("SELECT * FROM users where username='%s'" % username)
+        try:
+            cursor.execute("SELECT * FROM users where username='%s'" % username)
+        except sqlite3.OperationalError:
+            return 500
         row = cursor.fetchone()
         if not row:
             return auth_status
