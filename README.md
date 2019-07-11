@@ -9,6 +9,8 @@ pip install -r requirements.txt (use virtualenv when appropriate)
 
 config.py - configuration, including credentials; settings.py - administrative settings.
 
+The project uses iFrame, which is not allowed by NSO web server. In order for it to work, the restriction should be ignored by a browser. It can be achieved using plug-ins. For instance, iFrame Allow in Google Chrome
+
 # Usage
 
 Launching: python nso_cat.py
