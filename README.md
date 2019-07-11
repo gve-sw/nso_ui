@@ -1,10 +1,16 @@
-# Installation:
+# NSO UI
+-	A user friendly portal for customer demonstrations
 
-pip install -r requirements.txt
+# Installation
 
-Launching:
-python nso_cat.py
+pip install -r requirements.txt (use virtualenv when appropriate)
 
-Currently project expects NSO to listen on localhost:8080. Use config.py for configuration (including credentials)
+# Configuration
 
-Default username and password to access the portal: admin password
+config.py - configuration, including credentials; settings.py - administrative settings.
+
+# Usage
+
+Launching: python nso_cat.py
+
+Currently project expects NSO to run and listen on localhost:8080. Default username and password to access the portal: admin password
