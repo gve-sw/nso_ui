@@ -3,6 +3,8 @@
 
 # Installation
 
+Please be sure that you have NSO already installed in the same server you will install this PoV. Also there is a need for a DB for authentication. 
+
 pip install -r requirements.txt (use virtualenv when appropriate)
 
 # Configuration
