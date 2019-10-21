@@ -3,13 +3,13 @@
 
 You can use this template to create in a easy way to customize NSO features, using authentication process and create frames as GUI to show dasboards. 
 
-This is the High Level Design
+# High Level Design
 
+![High Level Design](https://github.com/moacosta/NSO_flaskGUI.png)
 
+Once you implement the GUI using this template you can have something like this: 
 
-And this is an example of the GUI
-
-
+![GUI mock up](https://github.com/moacosta/NSO_flaskGUI2.png)
  
 
 # Installation
