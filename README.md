@@ -5,11 +5,11 @@ You can use this template to create in a easy way to customize NSO features, usi
 
 # High Level Design
 
-![High Level Design](https://github.com/moacosta/NSO_flaskGUI.png)
+![High Level Design](https://github.com/moacosta/nso_ui/blob/master/NSO_flaskGUI.png)
 
 Once you implement the GUI using this template you can have something like this: 
 
-![GUI mock up](https://github.com/moacosta/NSO_flaskGUI2.png)
+![GUI mock up](https://github.com/moacosta/nso_ui/blob/master/NSO_flaskGUI2.png)
  
 
 # Installation
