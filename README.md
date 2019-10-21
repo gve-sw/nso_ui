@@ -1,6 +1,17 @@
 # NSO UI
 -	A user friendly portal for customer demonstrations
 
+You can use this template to create in a easy way to customize NSO features, using authentication process and create frames as GUI to show dasboards. 
+
+This is the High Level Design
+
+
+
+And this is an example of the GUI
+
+
+ 
+
 # Installation
 
 Please be sure that you have NSO already installed in the same server you will install this PoV. Also there is a need for a DB for authentication. 
